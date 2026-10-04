@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jewellery Profit Calculator</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Pacifico&display=swap">
+<style>
+:root{--bg:#fff5fa;--bg2:#efe6ff;--bg3:#e3f6ee;--card:rgba(255,255,255,.78);--ink:#4d3a63;--mute:#8a7a9e;--line:#f6d3e5;--acc:#c77dd6;--rose:#f48fb1;--mint:#3aa985;--bad:#e0693f;--track:#f3e3f3;--glow:rgba(244,143,177,.25);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1d36;--bg2:#2f2347;--bg3:#1f2f33;--card:rgba(58,42,76,.8);--ink:#fbeaf6;--mute:#c4aed6;--line:#5a4570;--acc:#dba2ec;--rose:#ff9fc3;--mint:#6fdcb5;--bad:#ffa27a;--track:#4a3860;--glow:rgba(255,159,195,.15)}}
+:root[data-theme="dark"]{--bg:#2a1d36;--bg2:#2f2347;--bg3:#1f2f33;--card:rgba(58,42,76,.8);--ink:#fbeaf6;--mute:#c4aed6;--line:#5a4570;--acc:#dba2ec;--rose:#ff9fc3;--mint:#6fdcb5;--bad:#ffa27a;--track:#4a3860;--glow:rgba(255,159,195,.15)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);min-height:100%;background:var(--bg)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:500 15px/1.55 "Quicksand",system-ui,sans-serif;background:radial-gradient(circle at 8% 4%,var(--bg2),transparent 40%),radial-gradient(circle at 95% 15%,var(--bg3),transparent 38%),linear-gradient(160deg,var(--bg),var(--bg2));background-attachment:fixed}
+.wrap{max-width:1080px;margin:0 auto;padding:22px 16px 48px}
+h1{font:400 clamp(30px,6vw,44px)/1.25 "Pacifico",cursive;margin:8px 0 8px;color:var(--acc);text-shadow:2px 2px 0 var(--line)}
+h1:after{content:" \2727";color:var(--rose)}
+h2{font:700 17px "Quicksand",sans-serif;margin:0;color:var(--ink)}
+.sub{color:var(--mute);margin:0 0 22px;max-width:60ch}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:2px solid var(--line);border-radius:24px;padding:18px;margin-bottom:16px;box-shadow:0 8px 24px var(--glow)}
+.card.off .body{opacity:.4;pointer-events:none}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}
+.why{color:var(--mute);font-size:13px;margin:0 0 10px}
+.row{margin:14px 0}
+.row label{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.row b{color:var(--rose);font-variant-numeric:tabular-nums;background:var(--track);padding:0 10px;border-radius:99px}
+input[type=range]{width:100%;accent-color:var(--rose);height:28px}
+.num{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.num label{display:block;font-size:13px;color:var(--mute)}
+.num input,.num select{width:100%;margin-top:3px;padding:9px 12px;border:2px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit}
+.num input:focus,.num select:focus{outline:none;border-color:var(--acc)}
+.sw{position:relative;width:50px;height:28px;flex:none}
+.sw input{opacity:0;position:absolute;inset:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:2}
+.sw i{position:absolute;inset:0;background:var(--track);border-radius:99px;transition:.2s}
+.sw i:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:.2s}
+.sw input:checked+i{background:linear-gradient(90deg,var(--rose),var(--acc))}
+.sw input:checked+i:after{transform:translateX(22px)}
+.sw input:focus-visible+i{outline:2px solid var(--ink);outline-offset:2px}
+.res{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.big{font:400 42px/1.2 "Pacifico",cursive;font-variant-numeric:tabular-nums}
+.pos{color:var(--mint)}.neg{color:var(--bad)}
+.kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:2px dotted var(--line);font-size:14px;font-variant-numeric:tabular-nums}
+.kv:last-child{border:0}
+.bar{display:grid;grid-template-columns:112px 1fr 92px;gap:8px;align-items:center;margin:10px 0;font-size:13px}
+.bt{height:16px;background:var(--track);border-radius:99px;position:relative;overflow:hidden}
+.bt span{position:absolute;top:0;bottom:0;transition:width .25s,left .25s;border-radius:99px}
+.note{font-size:12px;color:var(--mute);margin-top:10px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>What would these changes earn you?</h1>
+<p class="sub">Enter your own numbers, then switch each change on and move the sliders. The results update instantly. Defaults are sample figures, so replace them with yours.</p>
+
+<div class="grid">
+<div>
+<div class="card">
+<h2>✧ Your business today</h2>
+<div class="num" style="margin-top:10px">
+<label>Currency<select id="cur"><option>Rs</option><option>$</option><option>£</option><option>€</option></select></label>
+<label>Yearly revenue<input id="rev" type="number" value="5000000" min="0" step="50000"></label>
+<label>Gross margin %<input id="gm" type="number" value="45" min="1" max="95"></label>
+<label>Marketing % of revenue<input id="mk" type="number" value="12" min="0" max="60"></label>
+<label>Other costs % of revenue<input id="ov" type="number" value="18" min="0" max="80"></label>
+</div>
+<p class="note">Gross margin = what is left after materials, packaging and shipping. Other costs = rent, tools, salaries, platform fees.</p>
+</div>
+
+<div class="card" id="c1">
+<div class="head"><h2>❀ 1. Shift marketing to your best buyers</h2><label class="sw"><input type="checkbox" id="t1" checked aria-label="Enable change 1"><i></i></label></div>
+<p class="why">Ages 51-68 and 17-31 bring about 72% of spend. Ages 77+ are 34% of customers but under 8% of spend.</p>
+<div class="body">
+<div class="row"><label>Share of 77+ ad budget moved <b id="v1a"></b></label><input type="range" id="s1a" min="0" max="100" value="70"></div>
+<div class="row"><label>Return per 1 spent on top groups <b id="v1b"></b></label><input type="range" id="s1b" min="10" max="60" value="30"></div>
+<div class="row"><label>Return per 1 spent on 77+ groups <b id="v1c"></b></label><input type="range" id="s1c" min="0" max="30" value="10"></div>
+</div></div>
+
+<div class="card" id="c2">
+<div class="head"><h2>❀ 2. Convert the 22-44 savers</h2><label class="sw"><input type="checkbox" id="t2" checked aria-label="Enable change 2"><i></i></label></div>
+<p class="why">About 25% of customers earn well but score only 0.31 on spending, against 0.77 to 0.90 for your top buyers.</p>
+<div class="body">
+<div class="row"><label>Target spending score <b id="v2a"></b></label><input type="range" id="s2a" min="31" max="77" value="45"></div>
+<div class="row"><label>Share of this group reached <b id="v2b"></b></label><input type="range" id="s2b" min="0" max="100" value="50"></div>
+<div class="row"><label>Incentive cost (discounts, instalment fees) <b id="v2c"></b></label><input type="range" id="s2c" min="0" max="40" value="15"></div>
+</div></div>
+
+<div class="card" id="c3">
+<div class="head"><h2>❀ 3. Grow orders from proven buyers</h2><label class="sw"><input type="checkbox" id="t3" checked aria-label="Enable change 3"><i></i></label></div>
+<p class="why">Premium tier, bundles, loyalty rewards and occasion reminders aimed at your two top groups.</p>
+<div class="body">
+<div class="row"><label>Higher order value <b id="v3a"></b></label><input type="range" id="s3a" min="0" max="30" value="8"></div>
+<div class="row"><label>More repeat orders <b id="v3b"></b></label><input type="range" id="s3b" min="0" max="30" value="5"></div>
+<div class="row"><label>Reward cost, % of extra revenue <b id="v3c"></b></label><input type="range" id="s3c" min="0" max="30" value="10"></div>
+<div class="row"><label>Yearly program cost (tools, packaging) <b id="v3d"></b></label><input type="range" id="s3d" min="0" max="300000" step="5000" value="60000"></div>
+</div></div>
+</div>
+
+<div class="res">
+<div class="card">
+<div style="color:var(--mute);font-size:13px">Extra yearly profit</div>
+<div class="big" id="delta"></div>
+<div class="kv"><span>Profit today</span><span id="p0"></span></div>
+<div class="kv"><span>Profit with changes</span><span id="p1"></span></div>
+<div class="kv"><span>Profit margin</span><span id="m"></span></div>
+<div class="kv"><span>Extra revenue</span><span id="dr"></span></div>
+</div>
+<div class="card">
+<h2>✧ Where it comes from</h2>
+<div id="bars" style="margin-top:8px"></div>
+<p class="note">Estimates built from your customer data, not guarantees. Spending score is a relative index, and the data has no sales or cost figures, so the return sliders are assumptions to test against your real results. Change 3 builds on the extra revenue from change 1.</p>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var SH={top:.719,sen:.078,mid:.204,lowShare:.341};
+function fmt(n){var c=$('cur').value;var s=Math.abs(Math.round(n)).toLocaleString('en-US');return (n<0?'-':'')+c+' '+s}
+function sgn(n){return (n>=0?'+':'-')+fmt(Math.abs(n))}
+function g(i){return parseFloat($(i).value)||0}
+function calc(){
+var R=g('rev'),gm=g('gm')/100,mk=g('mk')/100*R,ov=g('ov')/100*R;
+var base=R*gm-mk-ov;
+var d1=0,r1=0,d2=0,r2=0,d3=0,r3=0;
+if($('t1').checked){
+var moved=mk*SH.lowShare*g('s1a')/100;
+r1=moved*g('s1b')/10-moved*g('s1c')/10;
+d1=r1*gm;
+}
+if($('t2').checked){
+var seg=R*SH.mid,t=g('s2a')/100,lift=(t/.31-1)*g('s2b')/100;
+r2=seg*lift;
+d2=r2*(gm-g('s2c')/100);
+}
+if($('t3').checked){
+var topRev=R*SH.top+r1*0.9;
+var up=(1+g('s3a')/100)*(1+g('s3b')/100)-1;
+r3=topRev*up;
+d3=r3*(gm-g('s3c')/100)-g('s3d');
+}
+return{base:base,R:R,d:[d1,d2,d3],r:[r1,r2,r3]};
+}
+function render(){
+['1a','1b','1c','2a','2b','2c','3a','3b','3c','3d'].forEach(function(k){
+var v=g('s'+k),o;
+if(k=='1a'||k=='2b'||k=='2c'||k=='3a'||k=='3b'||k=='3c')o=v+'%';
+else if(k=='1b'||k=='1c')o=(v/10).toFixed(1)+'x';
+else if(k=='2a')o=(v/100).toFixed(2);
+else o=fmt(v);
+$('v'+k).textContent=o;
+});
+[1,2,3].forEach(function(n){$('c'+n).classList.toggle('off',!$('t'+n).checked)});
+var c=calc(),tot=c.d[0]+c.d[1]+c.d[2],rt=c.r[0]+c.r[1]+c.r[2];
+var el=$('delta');el.textContent=sgn(tot);el.className='big '+(tot>=0?'pos':'neg');
+$('p0').textContent=fmt(c.base);
+$('p1').textContent=fmt(c.base+tot);
+var m0=c.R?c.base/c.R*100:0,m1=(c.R+rt)?(c.base+tot)/(c.R+rt)*100:0;
+$('m').textContent=m0.toFixed(1)+'% to '+m1.toFixed(1)+'%';
+$('dr').textContent=sgn(rt);
+var names=['1. Marketing shift','2. Convert savers','3. Order growth'];
+var mx=Math.max(1,Math.abs(c.d[0]),Math.abs(c.d[1]),Math.abs(c.d[2]));
+var h='';
+c.d.forEach(function(v,i){
+var w=Math.abs(v)/mx*50,col=v>=0?'linear-gradient(90deg,#9be3c6,var(--mint))':'linear-gradient(90deg,#ffc2a6,var(--bad))';
+var left=v>=0?50:50-w;
+h+='<div class="bar"><span>'+names[i]+'</span><div class="bt"><span style="left:'+left+'%;width:'+w+'%;background:'+col+'"></span><span style="left:50%;width:1px;background:var(--mute)"></span></div><b style="text-align:right">'+sgn(v)+'</b></div>';
+});
+$('bars').innerHTML=h;
+}
+document.querySelectorAll('input,select').forEach(function(e){e.addEventListener('input',render)});
+render();
+})();
+</script>
+</body>
+</html>
